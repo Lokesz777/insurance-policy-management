@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Policies</title>
+</head>
+<body>
+<h1>Policies for Customer [[${customerId}]]</h1>
+<a th:href="@{/policies/customer/{id}/new(id=${customerId})}">Add New Policy</a>
+<table border="1">
+    <tr>
+        <th>ID</th><th>Type</th><th>Coverage</th><th>Premium</th><th>Validity</th><th>Actions</th>
+    </tr>
+    <tr th:each="pol : ${policies}">
+        <td th:text="${pol.policyId}"></td>
+        <td th:text="${pol.policyType}"></td>
+        <td th:text="${pol.coverageAmount}"></td>
+        <td th:text="${pol.premiumAmount}"></td>
+        <td>
+            <span th:text="${pol.validityStartDate}"></span> -
+            <span th:text="${pol.validityEndDate}"></span>
+        </td>
+        <td>
+            <a th:href="@{/policies/{id}(id=${pol.policyId})}">View</a> |
+            <a th:href="@{/policies/{id}/edit(id=${pol.policyId})}">Edit</a> |
+            <a th:href="@{/policies/{id}/delete(id=${pol.policyId})}">Delete</a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

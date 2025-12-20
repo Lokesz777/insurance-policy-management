@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Policy Form</title>
+</head>
+<body>
+<h1 th:text="${policy.policyId == null ? 'Add Policy' : 'Edit Policy'}"></h1>
+<form th:action="@{${policy.policyId == null ? '/policies/customer/' + customerId : '/policies/' + policy.policyId}}"
+      th:object="${policy}" method="post">
+    Type: <input type="text" th:field="*{policyType}" /><br/>
+    Coverage: <input type="number" th:field="*{coverageAmount}" /><br/>
+    Premium: <input type="number" th:field="*{premiumAmount}" /><br/>
+    Start Date: <input type="date" th:field="*{validityStartDate}" /><br/>
+    End Date: <input type="date" th:field="*{validityEndDate}" /><br/>
+    <button type="submit">Save</button>
+</form>
+</body>
+</html>
