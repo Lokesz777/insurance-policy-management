@@ -1,12 +1,39 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Customers</title>
+    <title>Customer List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #eee;
+        }
+        a {
+            margin-right: 10px;
+            text-decoration: none;
+            color: blue;
+        }
+    </style>
 </head>
 <body>
 <h1>Customer List</h1>
 <a th:href="@{/customers/new}">Add New Customer</a>
-<table border="1">
+<table>
     <tr>
         <th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Actions</th>
     </tr>
@@ -16,7 +43,7 @@
         <td th:text="${cust.email}"></td>
         <td th:text="${cust.phone}"></td>
         <td>
-            <a th:href="@{/customers/{id}(id=${cust.customerId})}">View</a> |
+            <a th:href="@{/customers}">View</a>
             <a th:href="@{/customers/{id}/edit(id=${cust.customerId})}">Edit</a>
         </td>
     </tr>

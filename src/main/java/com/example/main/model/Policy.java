@@ -4,24 +4,24 @@ package com.example.main.model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 @Entity
 public class Policy {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="policy_id")
     private Long policyId;
-
+@Column(name="policy_type")
     private String policyType;
+@Column(name="coverage_amount")
     private BigDecimal coverageAmount;
+@Column(name="premium_amount")
     private BigDecimal premiumAmount;
+@Column(name="validity_start_date")
     private LocalDate validityStartDate;
+@Column(name="validity_end_date")
     private LocalDate validityEndDate;
 
     @ManyToOne

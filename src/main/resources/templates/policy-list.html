@@ -2,13 +2,61 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Policies</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        a {
+            display: inline-block;
+            margin-bottom: 15px;
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+        a:hover {
+            color: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #eee;
+        }
+        td a {
+            margin-right: 8px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        td a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
 <h1>Policies for Customer [[${customerId}]]</h1>
-<a th:href="@{/policies/customer/{id}/new(id=${customerId})}">Add New Policy</a>
-<table border="1">
+<a th:href="@{/policies/customer/{id}/new(id=${customerId})}">➕ Add New Policy</a>
+<table>
     <tr>
-        <th>ID</th><th>Type</th><th>Coverage</th><th>Premium</th><th>Validity</th><th>Actions</th>
+        <th>ID</th>
+        <th>Type</th>
+        <th>Coverage</th>
+        <th>Premium</th>
+        <th>Validity</th>
+        <th>Actions</th>
     </tr>
     <tr th:each="pol : ${policies}">
         <td th:text="${pol.policyId}"></td>

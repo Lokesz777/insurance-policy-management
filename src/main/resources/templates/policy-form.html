@@ -2,16 +2,69 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Policy Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 40px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ccc;
+            width: 400px;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="number"],
+        input[type="date"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #aaa;
+            border-radius: 4px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
 <h1 th:text="${policy.policyId == null ? 'Add Policy' : 'Edit Policy'}"></h1>
-<form th:action="@{${policy.policyId == null ? '/policies/customer/' + customerId : '/policies/' + policy.policyId}}"
-      th:object="${policy}" method="post">
-    Type: <input type="text" th:field="*{policyType}" /><br/>
-    Coverage: <input type="number" th:field="*{coverageAmount}" /><br/>
-    Premium: <input type="number" th:field="*{premiumAmount}" /><br/>
-    Start Date: <input type="date" th:field="*{validityStartDate}" /><br/>
-    End Date: <input type="date" th:field="*{validityEndDate}" /><br/>
+<form th:action="@{/policies/customer/{id}(id=${customerId})}" th:object="${policy}" method="post">
+    <label for="type">Type:</label>
+    <input type="text" th:field="*{policyType}" id="type" />
+
+    <label for="coverage">Coverage:</label>
+    <input type="number" th:field="*{coverageAmount}" id="coverage" />
+
+    <label for="premium">Premium:</label>
+    <input type="number" th:field="*{premiumAmount}" id="premium" />
+
+    <label for="start">Start Date:</label>
+    <input type="date" th:field="*{validityStartDate}" id="start" />
+
+    <label for="end">End Date:</label>
+    <input type="date" th:field="*{validityEndDate}" id="end" />
+
     <button type="submit">Save</button>
 </form>
 </body>
