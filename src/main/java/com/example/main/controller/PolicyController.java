@@ -1,3 +1,4 @@
+/*
 package com.example.main.controller;
 
 import com.example.main.model.Policy;
@@ -67,3 +68,4 @@ public class PolicyController {
         return "redirect:/policies/customer/" + customerId;
     }
 }
+*/

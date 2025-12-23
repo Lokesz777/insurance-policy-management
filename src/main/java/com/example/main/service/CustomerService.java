@@ -17,11 +17,12 @@ public class CustomerService {
     public Customer getById(Long id) { return repo.findById(id).orElseThrow(); }
     public Customer save(Customer c) { return repo.save(c); }
     public Customer update(Long id, Customer data) {
-        Customer existing = getById(id);
+        /*Customer existing = getById(id);
         existing.setName(data.getName());
         existing.setEmail(data.getEmail());
         existing.setPhone(data.getPhone());
-        existing.setAddress(data.getAddress());
-        return repo.save(existing);
+        existing.setAddress(data.getAddress());*/
+        data.setCustomerId(id);
+        return repo.save(data);
     }
 }

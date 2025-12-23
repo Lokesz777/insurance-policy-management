@@ -2,6 +2,7 @@ package com.example.main.controller;
 
 import com.example.main.model.Customer;
 import com.example.main.service.CustomerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +12,11 @@ import org.springframework.web.bind.annotation.*;
 public class CustomerController {
     private final CustomerService service;
 
-    public CustomerController(CustomerService service) { this.service = service; }
+    @Autowired
+    public CustomerController(CustomerService service)
+    {
+        this.service = service;
+    }
 
     @GetMapping
     public String list(Model model) {
@@ -19,11 +24,11 @@ public class CustomerController {
         return "customer-list";
     }
 
-    @GetMapping("/{id}")
-    public String details(@PathVariable Long id, Model model) {
-        model.addAttribute("customer", service.getById(id));
-        return "customer-details";
-    }
+//    @GetMapping("/{id}")
+//    public String details(@PathVariable Long id, Model model) {
+//        model.addAttribute("customer", service.getById(id));
+//        return "customer-details";
+//    }
 
     @GetMapping("/new")
     public String form(Model model) {
@@ -44,7 +49,7 @@ public class CustomerController {
     }
 
     @PostMapping("/{id}")
-    public String update(@PathVariable Long id, @ModelAttribute Customer customer) {
+    public String update(@PathVariable Long id, Customer customer) {
         service.update(id, customer);
         return "redirect:/customers";
     }

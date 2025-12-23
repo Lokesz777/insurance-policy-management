@@ -35,15 +35,16 @@
 <a th:href="@{/customers/new}">Add New Customer</a>
 <table>
     <tr>
-        <th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Actions</th>
+        <th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Address</th><th>Actions</th>
     </tr>
     <tr th:each="cust : ${customers}">
         <td th:text="${cust.customerId}"></td>
         <td th:text="${cust.name}"></td>
         <td th:text="${cust.email}"></td>
         <td th:text="${cust.phone}"></td>
+        <td th:text="${cust.address}"></td>
         <td>
-            <a th:href="@{/customers}">View</a>
+            <!--<a th:href="@{/customers}">View</a>-->
             <a th:href="@{/customers/{id}/edit(id=${cust.customerId})}">Edit</a>
         </td>
     </tr>

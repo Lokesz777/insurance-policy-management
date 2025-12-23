@@ -24,7 +24,7 @@ public class Policy {
 @Column(name="validity_end_date")
     private LocalDate validityEndDate;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
