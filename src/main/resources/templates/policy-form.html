@@ -5,8 +5,8 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
             margin: 40px;
+            background-color: #f9f9f9;
         }
         h1 {
             color: #333;
@@ -25,6 +25,7 @@
             font-weight: bold;
         }
         input[type="text"],
+        input[type="email"],
         input[type="number"],
         input[type="date"] {
             width: 100%;
@@ -49,23 +50,72 @@
 </head>
 <body>
 <h1 th:text="${policy.policyId == null ? 'Add Policy' : 'Edit Policy'}"></h1>
-<form th:action="@{/policies/customer/{id}(id=${customerId})}" th:object="${policy}" method="post">
-    <label for="type">Type:</label>
+<form th:action="@{/policies}" th:object="${policy}" method="post" th:if="${policy.policyId == null}">
+    <label for="customer">Customer:</label>
+    <select th:field="*{customer}" id="customer">
+        <option value="">Select Customer</option>
+        <option th:each="cust : ${customers}" th:value="${cust.customerId}" th:text="${cust.name}"></option>
+    </select>
+
+    <label for="type">Policy Type:</label>
     <input type="text" th:field="*{policyType}" id="type" />
 
-    <label for="coverage">Coverage:</label>
-    <input type="number" th:field="*{coverageAmount}" id="coverage" />
+    <label for="coverage">Coverage Amount:</label>
+    <input type="number" th:field="*{coverageAmount}" id="coverage" step="0.01" />
 
-    <label for="premium">Premium:</label>
-    <input type="number" th:field="*{premiumAmount}" id="premium" />
+    <label for="premium">Premium Amount:</label>
+    <input type="number" th:field="*{premiumAmount}" id="premium" step="0.01" />
 
-    <label for="start">Start Date:</label>
-    <input type="date" th:field="*{validityStartDate}" id="start" />
+    <label for="start">Validity Start Date:</label>
+    <input type="date" name="validityStartDate" th:value="${#temporals.format(policy.validityStartDate, 'yyyy-MM-dd')}" id="start" required />
 
-    <label for="end">End Date:</label>
-    <input type="date" th:field="*{validityEndDate}" id="end" />
+    <label for="end">Validity End Date:</label>
+    <input type="date" name="validityEndDate" th:value="${#temporals.format(policy.validityEndDate, 'yyyy-MM-dd')}" id="end" required />
 
-    <button type="submit">Save</button>
+    <button type="submit" onclick="return validateDates()">Save</button>
 </form>
+
+<form th:action="@{/policies/{id}(id=${policy.policyId})}" th:object="${policy}" method="post" th:unless="${policy.policyId == null}">
+    <label for="customer">Customer:</label>
+    <select th:field="*{customer}" id="customer">
+        <option value="">Select Customer</option>
+        <option th:each="cust : ${customers}" th:value="${cust.customerId}" th:text="${cust.name}"></option>
+    </select>
+
+    <label for="type">Policy Type:</label>
+    <input type="text" th:field="*{policyType}" id="type" />
+
+    <label for="coverage">Coverage Amount:</label>
+    <input type="number" th:field="*{coverageAmount}" id="coverage" step="0.01" />
+
+    <label for="premium">Premium Amount:</label>
+    <input type="number" th:field="*{premiumAmount}" id="premium" step="0.01" />
+
+    <label for="start">Validity Start Date:</label>
+    <input type="date" name="validityStartDate" th:value="${#temporals.format(policy.validityStartDate, 'yyyy-MM-dd')}" id="start" required />
+
+    <label for="end">Validity End Date:</label>
+    <input type="date" name="validityEndDate" th:value="${#temporals.format(policy.validityEndDate, 'yyyy-MM-dd')}" id="end" required />
+
+    <button type="submit" onclick="return validateDates()">Save</button>
+</form>
+
+<script>
+function validateDates() {
+    const startDate = document.getElementById('start').value;
+    const endDate = document.getElementById('end').value;
+    
+    if (!startDate || !endDate) {
+        alert('Please fill in both dates');
+        return false;
+    }
+    
+    if (new Date(endDate) <= new Date(startDate)) {
+        alert('End Date must be after Start Date');
+        return false;
+    }
+    return true;
+}
+</script>
 </body>
 </html>

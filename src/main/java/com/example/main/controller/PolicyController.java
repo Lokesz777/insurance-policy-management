@@ -1,71 +1,94 @@
-/*
 package com.example.main.controller;
 
-import com.example.main.model.Policy;
-import com.example.main.service.PolicyService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.example.main.model.Policy;
+import com.example.main.model.Customer;
+import com.example.main.service.CustomerService;
+import com.example.main.service.PolicyService;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/policies")
 public class PolicyController {
-    private final PolicyService service;
+    private final PolicyService policyService;
+    private final CustomerService customerService;
 
-    public PolicyController(PolicyService service) { this.service = service; }
+    @Autowired
+    public PolicyController(PolicyService policyService, CustomerService customerService) {
+        this.policyService = policyService;
+        this.customerService = customerService;
+    }
 
-    // List policies for a customer
-    @GetMapping("/customer/{customerId}")
-    public String listByCustomer(@PathVariable Long customerId, Model model) {
-        model.addAttribute("policies", service.getByCustomer(customerId));
-        model.addAttribute("customerId", customerId);
+    private List<Customer> getAvailableCustomers(Long currentPolicyId) {
+        List<Customer> allCustomers = customerService.getAll();
+        List<Long> mappedCustomerIds = policyService.getAll().stream()
+            .filter(p -> currentPolicyId == null || !p.getPolicyId().equals(currentPolicyId))
+            .filter(p -> p.getCustomer() != null)
+            .map(p -> p.getCustomer().getCustomerId())
+            .collect(Collectors.toList());
+        
+        return allCustomers.stream()
+            .filter(c -> !mappedCustomerIds.contains(c.getCustomerId()))
+            .collect(Collectors.toList());
+    }
+
+    @GetMapping
+    public String list(Model model) {
+        model.addAttribute("policies", policyService.getAll());
         return "policy-list";
     }
 
-    // Show policy details
-    @GetMapping("/{id}")
-    public String details(@PathVariable Long id, Model model) {
-        model.addAttribute("policy", service.getById(id));
-        return "policy-details";
-    }
-
-    // Show add form
-    @GetMapping("/customer/{customerId}/new")
-    public String form(@PathVariable Long customerId, Model model) {
+    @GetMapping("/new")
+    public String form(Model model) {
         model.addAttribute("policy", new Policy());
-        model.addAttribute("customerId", customerId);
+        model.addAttribute("customers", getAvailableCustomers(null));
         return "policy-form";
     }
 
-    // Save new policy
-    @PostMapping("/customer/{customerId}")
-    public String save(@PathVariable Long customerId, @ModelAttribute Policy policy) {
-        service.create(customerId, policy);
-        return "redirect:/policies/customer/" + customerId;
+    @PostMapping
+    public String save(@ModelAttribute Policy policy) {
+        if (policy.getCustomer() != null && policy.getCustomer().getCustomerId() != null) {
+            policy.setCustomer(customerService.getById(policy.getCustomer().getCustomerId()));
+        }
+        policyService.save(policy);
+        return "redirect:/policies";
     }
 
-    // Show edit form
     @GetMapping("/{id}/edit")
     public String editForm(@PathVariable Long id, Model model) {
-        Policy policy = service.getById(id);
+        Policy policy = policyService.getById(id);
         model.addAttribute("policy", policy);
-        model.addAttribute("customerId", policy.getCustomer().getCustomerId()); // add customerId
+        model.addAttribute("customers", getAvailableCustomers(id));
         return "policy-form";
     }
 
-    // Update policy
     @PostMapping("/{id}")
     public String update(@PathVariable Long id, @ModelAttribute Policy policy) {
-        service.update(id, policy);
-        return "redirect:/policies/" + id;
+        if (policy.getCustomer() != null && policy.getCustomer().getCustomerId() != null) {
+            policy.setCustomer(customerService.getById(policy.getCustomer().getCustomerId()));
+        }
+        policyService.update(id, policy);
+        return "redirect:/policies";
     }
 
-    // Delete policy
     @GetMapping("/{id}/delete")
     public String delete(@PathVariable Long id) {
-        Long customerId = service.getById(id).getCustomer().getCustomerId();
-        service.delete(id);
-        return "redirect:/policies/customer/" + customerId;
+        policyService.delete(id);
+        return "redirect:/policies";
+    }
+
+    @PostMapping("/{id}/delete")
+    public String deletePost(@PathVariable Long id) {
+        policyService.delete(id);
+        return "redirect:/policies";
     }
 }
-*/

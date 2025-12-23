@@ -25,7 +25,7 @@ public class Policy {
     private LocalDate validityEndDate;
 
     @OneToOne
-    @JoinColumn(name = "customer_id", nullable = false)
+    @JoinColumn(name = "customer_id", nullable = true)
     private Customer customer;
 
     // Getters and Setters
