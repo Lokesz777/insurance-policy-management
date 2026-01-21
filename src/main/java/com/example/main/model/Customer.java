@@ -74,6 +74,7 @@ public class Customer {
 	public void setPolicies(List<Policy> policies) {
 		this.policies = policies;
 	}
+    //
 
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Policy> policies;
